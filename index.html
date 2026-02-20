@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidature CIELF</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #13686b;
+    --wine: #861b3f;
+    --wine-dark: #6b1532;
+    --cream: #fafaf2;
+    --border: #ddd;
+    --text: #333333;
+    --text-light: #666666;
+    --error: #c0392b;
+    --error-bg: #fdf0ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  .form-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  /* ── En-tête ── */
+  .form-header {
+    background: var(--teal);
+    padding: 32px 40px 24px;
+    color: white;
+  }
+
+  .form-header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+  }
+
+  .form-header p {
+    font-size: 14px;
+    opacity: 0.85;
+    font-weight: 600;
+  }
+
+  /* ── Barre de progression ── */
+  .progress-bar-wrapper {
+    background: var(--teal);
+    padding: 0 40px 24px;
+  }
+
+  .progress-steps {
+    display: flex;
+    align-items: center;
+  }
+
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.25);
+    z-index: 0;
+    transition: background 0.4s;
+  }
+
+  .step-item.done:not(:last-child)::after {
+    background: rgba(255,255,255,0.6);
+  }
+
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .step-item.active .step-dot {
+    background: white;
+    border-color: white;
+    color: var(--teal);
+  }
+
+  .step-item.done .step-dot {
+    background: rgba(255,255,255,0.6);
+    border-color: white;
+    color: white;
+  }
+
+  .step-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 5px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .step-item.active .step-label,
+  .step-item.done .step-label {
+    color: white;
+  }
+
+  /* ── Corps ── */
+  .form-body {
+    padding: 36px 40px 40px;
+  }
+
+  /* Étapes cachées par défaut */
+  .step-content { display: none; }
+  .step-content.active { display: block; }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 28px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-row.full {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  label.field-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  label.field-label .required {
+    color: var(--wine);
+    margin-left: 2px;
+  }
+
+  label.field-label .optional {
+    color: var(--text-light);
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 4px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(19, 104, 107, 0.12);
+  }
+
+  input.error, select.error, textarea.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #bbb;
+    font-weight: 400;
+  }
+
+  textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  textarea.tall { min-height: 120px; }
+  textarea.medium { min-height: 100px; }
+  textarea.short { min-height: 80px; }
+
+  .char-hint {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  /* ── Messages d'erreur ── */
+  .error-msg {
+    display: none;
+    font-size: 12px;
+    color: var(--error);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .error-msg.visible {
+    display: block;
+  }
+
+  /* ── Encadrés info ── */
+  .info-box {
+    background: #f0f8f8;
+    border-left: 3px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .info-box strong {
+    color: var(--teal);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .values-hint {
+    background: #fff8f5;
+    border-left: 3px solid var(--wine);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .values-hint strong {
+    color: var(--wine);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .values-hint a {
+    color: var(--wine);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .values-hint a:hover { text-decoration: underline; }
+
+  /* ── Checkbox RGPD ── */
+  .rgpd-group {
+    margin-bottom: 20px;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    display: none;
+  }
+
+  .checkbox-custom {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+
+  .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+
+  .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .checkbox-label:hover .checkbox-custom {
+    border-color: var(--teal);
+  }
+
+  .checkbox-custom.error {
+    border-color: var(--error);
+  }
+
+  /* ── Boutons navigation ── */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .btn-back {
+    padding: 15px 24px;
+    background: transparent;
+    color: var(--text-light);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+
+  .btn-next, .btn-submit {
+    flex: 1;
+    padding: 15px;
+    background: var(--wine);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-next:hover, .btn-submit:hover { background: var(--wine-dark); }
+  .btn-next:active, .btn-submit:active { transform: scale(0.99); }
+
+  .btn-submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  /* ── Page de confirmation ── */
+  .confirmation {
+    display: none;
+    text-align: center;
+    padding: 60px 40px;
+  }
+
+  .confirmation.active {
+    display: block;
+  }
+
+  .confirmation-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 32px;
+    color: white;
+  }
+
+  .confirmation h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--teal);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .confirmation p {
+    font-size: 15px;
+    color: var(--text-light);
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto 12px;
+  }
+
+  .confirmation .signature {
+    margin-top: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  /* ── Spinner envoi ── */
+  .sending-msg {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: var(--text-light);
+    font-weight: 600;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 540px) {
+    .form-header, .progress-bar-wrapper, .form-body {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .form-row { grid-template-columns: 1fr; }
+    .step-label { display: none; }
+    .confirmation { padding: 40px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-wrapper">
+
+  <!-- ── En-tête (caché sur la confirmation) ── -->
+  <div class="form-header" id="formHeader">
+    <h1>Candidature CIELF</h1>
+    <p>Mieux vous connaître, pour mieux vous connecter.</p>
+  </div>
+
+  <!-- ── Barre de progression (cachée sur la confirmation) ── -->
+  <div class="progress-bar-wrapper" id="progressBar">
+    <div class="progress-steps">
+      <div class="step-item active" id="prog-1">
+        <div class="step-dot">1</div>
+        <span class="step-label">Vous</span>
+      </div>
+      <div class="step-item" id="prog-2">
+        <div class="step-dot">2</div>
+        <span class="step-label">Business</span>
+      </div>
+      <div class="step-item" id="prog-3">
+        <div class="step-dot">3</div>
+        <span class="step-label">International</span>
+      </div>
+      <div class="step-item" id="prog-4">
+        <div class="step-dot">4</div>
+        <span class="step-label">CIELF</span>
+      </div>
+      <div class="step-item" id="prog-5">
+        <div class="step-dot">5</div>
+        <span class="step-label">Engagement</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Corps du formulaire ── -->
+  <div class="form-body" id="formBody">
+
+    <!-- ════════════════════════════════
+         ÉTAPE 1 — Qui êtes-vous ?
+    ════════════════════════════════ -->
+    <div class="step-content active" id="step-1">
+
+      <h2 class="section-title">Qui êtes-vous ?</h2>
+      <p class="section-subtitle">Les informations de base pour faire connaissance.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="prenom">Prénom <span class="required">*</span></label>
+          <input type="text" id="prenom" placeholder="Juliette">
+          <span class="error-msg" id="err-prenom">Veuillez saisir votre prénom.</span>
+        </div>
+        <div class="form-group">
+          <label class="field-label" for="nom">Nom <span class="required">*</span></label>
+          <input type="text" id="nom" placeholder="Bodson">
+          <span class="error-msg" id="err-nom">Veuillez saisir votre nom.</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="email">Adresse e-mail <span class="required">*</span></label>
+          <input type="email" id="email" placeholder="juliette@cielf.com">
+          <span class="error-msg" id="err-email">Veuillez saisir une adresse e-mail valide.</span>
+        </div>
+        <div class="form-group">
+          <label class="field-label" for="telephone">Téléphone</label>
+          <input type="tel" id="telephone" placeholder="+32 xxx xx xx xx">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="pays">Pays <span class="required">*</span></label>
+          <input type="text" id="pays" placeholder="Belgique">
+          <span class="error-msg" id="err-pays">Veuillez indiquer votre pays.</span>
+        </div>
+        <div class="form-group">
+          <label class="field-label" for="ville">Ville <span class="required">*</span></label>
+          <input type="text" id="ville" placeholder="Bruxelles">
+          <span class="error-msg" id="err-ville">Veuillez indiquer votre ville.</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-next" onclick="nextStep(1)">Continuer →</button>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════
+         ÉTAPE 2 — Votre business
+    ════════════════════════════════ -->
+    <div class="step-content" id="step-2">
+
+      <h2 class="section-title">Votre business</h2>
+      <p class="section-subtitle">Parlez-nous de ce que vous construisez.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="nomEntreprise">Nom de votre entreprise <span class="required">*</span></label>
+          <input type="text" id="nomEntreprise" placeholder="CIELF ASBL">
+          <span class="error-msg" id="err-nomEntreprise">Veuillez indiquer le nom de votre entreprise.</span>
+        </div>
+        <div class="form-group">
+          <label class="field-label" for="secteur">Secteur d'activité <span class="required">*</span></label>
+          <input type="text" id="secteur" placeholder="Formation, Conseil, Tech...">
+          <span class="error-msg" id="err-secteur">Veuillez indiquer votre secteur d'activité.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="anciennete">Votre business existe depuis <span class="required">*</span></label>
+        <select id="anciennete">
+          <option value="" disabled selected>Sélectionnez une option</option>
+          <option value="Moins d'1 an">Moins d'1 an</option>
+          <option value="1 à 3 ans">1 à 3 ans</option>
+          <option value="3 à 5 ans">3 à 5 ans</option>
+          <option value="5 à 10 ans">5 à 10 ans</option>
+          <option value="Plus de 10 ans">Plus de 10 ans</option>
+        </select>
+        <span class="error-msg" id="err-anciennete">Veuillez sélectionner une option.</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="siteWeb">Site web <span class="optional">(optionnel)</span></label>
+          <input type="url" id="siteWeb" placeholder="https://votre-site.com">
+        </div>
+        <div class="form-group">
+          <label class="field-label" for="linkedin">Profil LinkedIn <span class="required">*</span></label>
+          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
+          <span class="error-msg" id="err-linkedin">Veuillez indiquer votre profil LinkedIn.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="descriptionBusiness">Décrivez votre business en 2-3 phrases <span class="required">*</span></label>
+        <textarea class="tall" id="descriptionBusiness" placeholder="Qu'est-ce que vous faites, pour qui, et ce qui vous différencie..."></textarea>
+        <span class="char-hint">Soyez concis et direct — comme si vous vous présentiez à un entrepreneur que vous venez de rencontrer.</span>
+        <span class="error-msg" id="err-descriptionBusiness">Veuillez décrire votre business.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="prevStep(2)">← Retour</button>
+        <button class="btn-next" onclick="nextStep(2)">Continuer →</button>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════
+         ÉTAPE 3 — Vision internationale
+    ════════════════════════════════ -->
+    <div class="step-content" id="step-3">
+
+      <h2 class="section-title">Votre vision internationale</h2>
+      <p class="section-subtitle">C'est le cœur de CIELF. Pas besoin d'avoir tout planifié — l'important, c'est la direction.</p>
+
+      <div class="info-box">
+        <strong>Pas de fausse modestie ici 🌍</strong>
+        Votre projet peut être encore flou, naissant, ou déjà bien avancé. Ce qui compte, c'est que vous ayez cette envie d'aller plus loin que vos frontières.
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="visionInternationale">Décrivez votre projet ou vision d'expansion internationale <span class="required">*</span></label>
+        <textarea class="tall" id="visionInternationale" placeholder="Où voulez-vous emmener votre business ? Quels marchés vous attirent ? Qu'est-ce qui vous retient encore ?"></textarea>
+        <span class="char-hint">Même si c'est encore flou, exprimez votre ambition telle qu'elle est aujourd'hui.</span>
+        <span class="error-msg" id="err-visionInternationale">Veuillez décrire votre vision internationale.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="paysVises">Quels pays ou régions visez-vous en priorité ? <span class="required">*</span></label>
+        <textarea class="short" id="paysVises" placeholder="Ex : France, Québec, Afrique francophone, Asie du Sud-Est..."></textarea>
+        <span class="error-msg" id="err-paysVises">Veuillez indiquer les pays ou régions visés.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="prevStep(3)">← Retour</button>
+        <button class="btn-next" onclick="nextStep(3)">Continuer →</button>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════
+         ÉTAPE 4 — Pourquoi CIELF ?
+    ════════════════════════════════ -->
+    <div class="step-content" id="step-4">
+
+      <h2 class="section-title">Pourquoi CIELF ?</h2>
+      <p class="section-subtitle">On veut comprendre ce qui vous a amené ici — et ce que vous avez à apporter.</p>
+
+      <div class="form-group">
+        <label class="field-label" for="pourquoiCIELF">Pourquoi voulez-vous rejoindre CIELF ? <span class="required">*</span></label>
+        <textarea class="tall" id="pourquoiCIELF" placeholder="Qu'est-ce qui vous a décidé à candidater ? Qu'attendez-vous concrètement de cette communauté ?"></textarea>
+        <span class="char-hint">Soyez honnête. On préfère une vraie réponse imparfaite à une belle réponse creuse.</span>
+        <span class="error-msg" id="err-pourquoiCIELF">Veuillez répondre à cette question.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="apport">Qu'êtes-vous prêt(e) à apporter à la communauté ? <span class="required">*</span></label>
+        <textarea class="medium" id="apport" placeholder="Expertise, contacts, soutien, énergie... Qu'avez-vous à donner ?"></textarea>
+        <span class="error-msg" id="err-apport">Veuillez répondre à cette question.</span>
+      </div>
+
+      <div class="form-group">
+        <div class="values-hint">
+          <strong>📖 Pour répondre à cette question...</strong>
+          Rendez-vous sur notre <a href="https://www.cielf.com/a-propos" target="_blank">page À propos</a> pour découvrir les 4 valeurs de CIELF — si vous ne les avez pas encore lues, c'est le moment !
+        </div>
+        <label class="field-label" for="valeur">Parmi les 4 valeurs de CIELF, laquelle résonne le plus avec qui vous êtes ? Pourquoi ? <span class="required">*</span></label>
+        <textarea class="tall" id="valeur" placeholder="Nommez la valeur et expliquez en quoi elle vous ressemble, avec un exemple concret si possible."></textarea>
+        <span class="error-msg" id="err-valeur">Veuillez répondre à cette question.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label" for="source">Comment avez-vous entendu parler de CIELF ? <span class="required">*</span></label>
+        <select id="source">
+          <option value="" disabled selected>Sélectionnez une option</option>
+          <option value="LinkedIn">LinkedIn</option>
+          <option value="Recommandation d'un proche">Recommandation d'un proche</option>
+          <option value="Google">Google</option>
+          <option value="Lors d'un événement">Lors d'un événement</option>
+          <option value="Autre">Autre</option>
+        </select>
+        <span class="error-msg" id="err-source">Veuillez sélectionner une option.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="prevStep(4)">← Retour</button>
+        <button class="btn-next" onclick="nextStep(4)">Continuer →</button>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════
+         ÉTAPE 5 — Engagement & Envoi
+    ════════════════════════════════ -->
+    <div class="step-content" id="step-5">
+
+      <h2 class="section-title">Presque là !</h2>
+      <p class="section-subtitle">Votre candidature est prête — plus qu'une étape.</p>
+
+      <div class="info-box">
+        <strong>Et maintenant ? 📅</strong>
+        Dès réception de votre candidature, vous recevrez un email avec le lien pour réserver votre entretien de 20 minutes avec Juliette ou Geneviève. Nous lirons votre dossier avec attention avant notre échange.
+      </div>
+
+      <!-- RGPD -->
+      <div class="rgpd-group">
+        <label class="checkbox-label" for="rgpd">
+          <input type="checkbox" id="rgpd">
+          <span class="checkbox-custom" id="rgpd-custom"></span>
+          <span>J'accepte que mes données personnelles soient utilisées par CIELF dans le cadre du traitement de ma candidature, conformément au RGPD. Elles ne seront pas transmises à des tiers. <span style="color: var(--wine);">*</span></span>
+        </label>
+        <span class="error-msg" id="err-rgpd">Vous devez accepter pour soumettre votre candidature.</span>
+      </div>
+
+      <div class="sending-msg" id="sendingMsg">
+        Envoi en cours... ⏳
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="prevStep(5)">← Retour</button>
+        <button class="btn-submit" id="btnSubmit" onclick="submitForm()">Envoyer ma candidature →</button>
+      </div>
+
+    </div>
+
+  </div><!-- fin form-body -->
+
+  <!-- ════════════════════════════════
+       PAGE DE CONFIRMATION
+  ════════════════════════════════ -->
+  <div class="confirmation" id="confirmation">
+    <div class="confirmation-icon">✓</div>
+    <h2>Votre candidature a bien été envoyée !</h2>
+    <p>Merci <strong id="confirmPrenom"></strong>, vous allez recevoir dans quelques minutes un email de confirmation avec le lien pour réserver votre entretien de 20 minutes avec Juliette ou Geneviève.</p>
+    <p>Nous lirons votre candidature avec attention avant notre échange.</p>
+    <p>À très bientôt !</p>
+    <div class="signature">Juliette & Geneviève<br>Cofondatrices de CIELF</div>
+  </div>
+
+</div><!-- fin form-wrapper -->
+
+<script>
+  // ════════════════════════════════════════
+  // CONFIGURATION — À MODIFIER
+  // ════════════════════════════════════════
+
+  // URL de votre Google Apps Script Web App (à remplir après déploiement)
+  const APPS_SCRIPT_URL = 'VOTRE_URL_APPS_SCRIPT_ICI';
+
+  // ════════════════════════════════════════
+  // NAVIGATION ENTRE ÉTAPES
+  // ════════════════════════════════════════
+
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  function nextStep(from) {
+    if (!validateStep(from)) return;
+    goToStep(from + 1);
+  }
+
+  function prevStep(from) {
+    goToStep(from - 1);
+  }
+
+  function goToStep(stepNum) {
+    // Cacher l'étape actuelle
+    document.getElementById('step-' + currentStep).classList.remove('active');
+
+    // Mettre à jour la barre de progression
+    for (let i = 1; i <= totalSteps; i++) {
+      const prog = document.getElementById('prog-' + i);
+      const dot = prog.querySelector('.step-dot');
+      prog.classList.remove('active', 'done');
+
+      if (i < stepNum) {
+        prog.classList.add('done');
+        dot.textContent = '✓';
+      } else if (i === stepNum) {
+        prog.classList.add('active');
+        dot.textContent = i;
+      } else {
+        dot.textContent = i;
+      }
+    }
+
+    // Afficher la nouvelle étape
+    currentStep = stepNum;
+    document.getElementById('step-' + currentStep).classList.add('active');
+
+    // Scroll vers le haut
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ════════════════════════════════════════
+  // VALIDATION PAR ÉTAPE
+  // ════════════════════════════════════════
+
+  function validateStep(step) {
+    let valid = true;
+
+    if (step === 1) {
+      valid = validateRequired('prenom') && valid;
+      valid = validateRequired('nom') && valid;
+      valid = validateEmail('email') && valid;
+      valid = validateRequired('pays') && valid;
+      valid = validateRequired('ville') && valid;
+    }
+
+    if (step === 2) {
+      valid = validateRequired('nomEntreprise') && valid;
+      valid = validateRequired('secteur') && valid;
+      valid = validateSelect('anciennete') && valid;
+      valid = validateRequired('linkedin') && valid;
+      valid = validateRequired('descriptionBusiness') && valid;
+    }
+
+    if (step === 3) {
+      valid = validateRequired('visionInternationale') && valid;
+      valid = validateRequired('paysVises') && valid;
+    }
+
+    if (step === 4) {
+      valid = validateRequired('pourquoiCIELF') && valid;
+      valid = validateRequired('apport') && valid;
+      valid = validateRequired('valeur') && valid;
+      valid = validateSelect('source') && valid;
+    }
+
+    return valid;
+  }
+
+  function validateRequired(fieldId) {
+    const field = document.getElementById(fieldId);
+    const err = document.getElementById('err-' + fieldId);
+    if (!field.value.trim()) {
+      field.classList.add('error');
+      if (err) err.classList.add('visible');
+      return false;
+    }
+    field.classList.remove('error');
+    if (err) err.classList.remove('visible');
+    return true;
+  }
+
+  function validateEmail(fieldId) {
+    const field = document.getElementById(fieldId);
+    const err = document.getElementById('err-' + fieldId);
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(field.value.trim())) {
+      field.classList.add('error');
+      if (err) err.classList.add('visible');
+      return false;
+    }
+    field.classList.remove('error');
+    if (err) err.classList.remove('visible');
+    return true;
+  }
+
+  function validateSelect(fieldId) {
+    const field = document.getElementById(fieldId);
+    const err = document.getElementById('err-' + fieldId);
+    if (!field.value) {
+      field.classList.add('error');
+      if (err) err.classList.add('visible');
+      return false;
+    }
+    field.classList.remove('error');
+    if (err) err.classList.remove('visible');
+    return true;
+  }
+
+  // Effacer erreur dès que l'utilisateur tape
+  document.querySelectorAll('input, textarea, select').forEach(function(el) {
+    el.addEventListener('input', function() {
+      el.classList.remove('error');
+      const err = document.getElementById('err-' + el.id);
+      if (err) err.classList.remove('visible');
+    });
+    el.addEventListener('change', function() {
+      el.classList.remove('error');
+      const err = document.getElementById('err-' + el.id);
+      if (err) err.classList.remove('visible');
+    });
+  });
+
+  // ════════════════════════════════════════
+  // SOUMISSION DU FORMULAIRE
+  // ════════════════════════════════════════
+
+  function submitForm() {
+
+    // Valider RGPD
+    const rgpd = document.getElementById('rgpd');
+    const rgpdCustom = document.getElementById('rgpd-custom');
+    const errRgpd = document.getElementById('err-rgpd');
+
+    if (!rgpd.checked) {
+      rgpdCustom.classList.add('error');
+      errRgpd.classList.add('visible');
+      return;
+    }
+    rgpdCustom.classList.remove('error');
+    errRgpd.classList.remove('visible');
+
+    // Désactiver le bouton + afficher message envoi
+    document.getElementById('btnSubmit').disabled = true;
+    document.getElementById('sendingMsg').style.display = 'block';
+
+    // Collecter toutes les données
+    const data = {
+      prenom:               document.getElementById('prenom').value.trim(),
+      nom:                  document.getElementById('nom').value.trim(),
+      email:                document.getElementById('email').value.trim(),
+      telephone:            document.getElementById('telephone').value.trim(),
+      pays:                 document.getElementById('pays').value.trim(),
+      ville:                document.getElementById('ville').value.trim(),
+      nomEntreprise:        document.getElementById('nomEntreprise').value.trim(),
+      secteur:              document.getElementById('secteur').value.trim(),
+      anciennete:           document.getElementById('anciennete').value,
+      siteWeb:              document.getElementById('siteWeb').value.trim(),
+      linkedin:             document.getElementById('linkedin').value.trim(),
+      descriptionBusiness:  document.getElementById('descriptionBusiness').value.trim(),
+      visionInternationale: document.getElementById('visionInternationale').value.trim(),
+      paysVises:            document.getElementById('paysVises').value.trim(),
+      pourquoiCIELF:        document.getElementById('pourquoiCIELF').value.trim(),
+      apport:               document.getElementById('apport').value.trim(),
+      valeur:               document.getElementById('valeur').value.trim(),
+      source:               document.getElementById('source').value,
+      dateEnvoi:            new Date().toLocaleString('fr-BE', { timeZone: 'Europe/Brussels' })
+    };
+
+    // Envoyer à Apps Script
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function() {
+      showConfirmation(data.prenom);
+    })
+    .catch(function() {
+      // En cas d'erreur réseau, on affiche quand même la confirmation
+      // (Apps Script avec no-cors ne retourne pas d'erreur exploitable)
+      showConfirmation(data.prenom);
+    });
+  }
+
+  function showConfirmation(prenom) {
+    // Cacher header, barre de progression et formulaire
+    document.getElementById('formHeader').style.display = 'none';
+    document.getElementById('progressBar').style.display = 'none';
+    document.getElementById('formBody').style.display = 'none';
+
+    // Afficher la confirmation avec le prénom
+    document.getElementById('confirmPrenom').textContent = prenom + ',';
+    document.getElementById('confirmation').classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
