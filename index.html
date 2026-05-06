@@ -140,7 +140,6 @@
     padding: 36px 40px 40px;
   }
 
-  /* Étapes cachées par défaut */
   .step-content { display: none; }
   .step-content.active { display: block; }
 
@@ -260,9 +259,7 @@
     margin-top: 4px;
   }
 
-  .error-msg.visible {
-    display: block;
-  }
+  .error-msg.visible { display: block; }
 
   /* ── Encadrés info ── */
   .info-box {
@@ -308,9 +305,7 @@
   .values-hint a:hover { text-decoration: underline; }
 
   /* ── Checkbox RGPD ── */
-  .rgpd-group {
-    margin-bottom: 20px;
-  }
+  .rgpd-group { margin-bottom: 20px; }
 
   .checkbox-label {
     display: flex;
@@ -323,9 +318,7 @@
     line-height: 1.5;
   }
 
-  .checkbox-label input[type="checkbox"] {
-    display: none;
-  }
+  .checkbox-label input[type="checkbox"] { display: none; }
 
   .checkbox-custom {
     width: 20px;
@@ -353,13 +346,8 @@
     font-weight: 800;
   }
 
-  .checkbox-label:hover .checkbox-custom {
-    border-color: var(--teal);
-  }
-
-  .checkbox-custom.error {
-    border-color: var(--error);
-  }
+  .checkbox-label:hover .checkbox-custom { border-color: var(--teal); }
+  .checkbox-custom.error { border-color: var(--error); }
 
   /* ── Boutons navigation ── */
   .btn-row {
@@ -403,11 +391,7 @@
 
   .btn-next:hover, .btn-submit:hover { background: var(--wine-dark); }
   .btn-next:active, .btn-submit:active { transform: scale(0.99); }
-
-  .btn-submit:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
+  .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
 
   /* ── Page de confirmation ── */
   .confirmation {
@@ -416,9 +400,7 @@
     padding: 60px 40px;
   }
 
-  .confirmation.active {
-    display: block;
-  }
+  .confirmation.active { display: block; }
 
   .confirmation-icon {
     width: 72px;
@@ -482,13 +464,13 @@
 
 <div class="form-wrapper">
 
-  <!-- ── En-tête (caché sur la confirmation) ── -->
+  <!-- ── En-tête ── -->
   <div class="form-header" id="formHeader">
     <h1>Candidature CIELF</h1>
     <p>Mieux vous connaître, pour mieux vous connecter.</p>
   </div>
 
-  <!-- ── Barre de progression (cachée sur la confirmation) ── -->
+  <!-- ── Barre de progression ── -->
   <div class="progress-bar-wrapper" id="progressBar">
     <div class="progress-steps">
       <div class="step-item active" id="prog-1">
@@ -517,11 +499,8 @@
   <!-- ── Corps du formulaire ── -->
   <div class="form-body" id="formBody">
 
-    <!-- ════════════════════════════════
-         ÉTAPE 1 — Qui êtes-vous ?
-    ════════════════════════════════ -->
+    <!-- ÉTAPE 1 — Qui êtes-vous ? -->
     <div class="step-content active" id="step-1">
-
       <h2 class="section-title">Qui êtes-vous ?</h2>
       <p class="section-subtitle">Les informations de base pour faire connaissance.</p>
 
@@ -545,7 +524,7 @@
           <span class="error-msg" id="err-email">Veuillez saisir une adresse e-mail valide.</span>
         </div>
         <div class="form-group">
-          <label class="field-label" for="telephone">Téléphone</label>
+          <label class="field-label" for="telephone">Téléphone <span class="optional">(optionnel)</span></label>
           <input type="tel" id="telephone">
         </div>
       </div>
@@ -566,14 +545,10 @@
       <div class="btn-row">
         <button class="btn-next" onclick="nextStep(1)">Continuer →</button>
       </div>
-
     </div>
 
-    <!-- ════════════════════════════════
-         ÉTAPE 2 — Votre business
-    ════════════════════════════════ -->
+    <!-- ÉTAPE 2 — Votre business -->
     <div class="step-content" id="step-2">
-
       <h2 class="section-title">Votre business</h2>
       <p class="section-subtitle">Parlez-nous de ce que vous construisez.</p>
 
@@ -626,14 +601,10 @@
         <button class="btn-back" onclick="prevStep(2)">← Retour</button>
         <button class="btn-next" onclick="nextStep(2)">Continuer →</button>
       </div>
-
     </div>
 
-    <!-- ════════════════════════════════
-         ÉTAPE 3 — Vision internationale
-    ════════════════════════════════ -->
+    <!-- ÉTAPE 3 — Vision internationale -->
     <div class="step-content" id="step-3">
-
       <h2 class="section-title">Votre vision internationale</h2>
       <p class="section-subtitle">C'est le cœur de CIELF. Pas besoin d'avoir tout planifié; l'important, c'est la direction.</p>
 
@@ -659,14 +630,10 @@
         <button class="btn-back" onclick="prevStep(3)">← Retour</button>
         <button class="btn-next" onclick="nextStep(3)">Continuer →</button>
       </div>
-
     </div>
 
-    <!-- ════════════════════════════════
-         ÉTAPE 4 — Pourquoi CIELF ?
-    ════════════════════════════════ -->
+    <!-- ÉTAPE 4 — Pourquoi CIELF ? -->
     <div class="step-content" id="step-4">
-
       <h2 class="section-title">Pourquoi CIELF ?</h2>
       <p class="section-subtitle">On veut comprendre ce qui vous a amené ici, et ce que vous avez à apporter.</p>
 
@@ -707,23 +674,19 @@
       </div>
 
       <div class="form-group" id="group-recommande-par" style="display:none;">
-  <label class="field-label" for="recommandePar">Nom et prénom de la personne qui vous a recommandé <span class="required">*</span></label>
-  <input type="text" id="recommandePar" placeholder="Ex : Marie Dupont">
-  <span class="error-msg" id="err-recommande-par">Veuillez indiquer le nom de la personne.</span>
-</div>
+        <label class="field-label" for="recommandePar">Nom et prénom de la personne qui vous a recommandé <span class="required">*</span></label>
+        <input type="text" id="recommandePar" placeholder="Ex : Marie Dupont">
+        <span class="error-msg" id="err-recommande-par">Veuillez indiquer le nom de la personne.</span>
+      </div>
 
       <div class="btn-row">
         <button class="btn-back" onclick="prevStep(4)">← Retour</button>
         <button class="btn-next" onclick="nextStep(4)">Continuer →</button>
       </div>
-
     </div>
 
-    <!-- ════════════════════════════════
-         ÉTAPE 5 — Engagement & Envoi
-    ════════════════════════════════ -->
+    <!-- ÉTAPE 5 — Engagement & Envoi -->
     <div class="step-content" id="step-5">
-
       <h2 class="section-title">Presque là !</h2>
       <p class="section-subtitle">Votre candidature est prête — plus qu'une étape.</p>
 
@@ -732,7 +695,6 @@
         Dès confirmation de votre candidature, vous pourrez réserver votre entretien de 20 minutes avec Juliette ou Geneviève. Nous lirons votre dossier avec attention avant notre échange.
       </div>
 
-      <!-- RGPD -->
       <div class="rgpd-group">
         <label class="checkbox-label" for="rgpd">
           <input type="checkbox" id="rgpd">
@@ -750,22 +712,18 @@
         <button class="btn-back" onclick="prevStep(5)">← Retour</button>
         <button class="btn-submit" id="btnSubmit" onclick="submitForm()">Envoyer ma candidature →</button>
       </div>
-
     </div>
 
   </div><!-- fin form-body -->
 
-  <!-- ════════════════════════════════
-       PAGE DE CONFIRMATION
-  ════════════════════════════════ -->
+  <!-- PAGE DE CONFIRMATION -->
   <div class="confirmation" id="confirmation">
     <div class="confirmation-icon">✓</div>
     <h2>Votre candidature a bien été envoyée !</h2>
     <p>Merci <strong id="confirmPrenom"></strong></p>
-    <p>L'étape suivante: un entretien de 20 minutes avec une des fondatrices de CIELF.</p>
-    <p><ul>Réservez votre créneau avec Juliette: <a href="https://calendly.com/contact-cielf/20min">Calendly de Juliette</a></ul></p>
-    <p><ul>Réservez votre créneau avec Geneviève: <a href="https://calendly.com/genevieve-cielf/20min">Calendly de Geneviève</a></ul></p>
-    <p>Vous allez aussi recevoir, dans quelques minutes, un email de confirmation de votre candidature. L'envoi de ce mail passe par un service sécurisé, cela peut prendre du temps. Si vous ne l'avez pas reçu dans 30 minutes, vérifiez vos spams ou courriers indésirables.</p>
+    <p>L'étape suivante : un entretien de 20 minutes avec une des fondatrices de CIELF.</p>
+    <p>Réservez votre créneau avec <a href="https://calendly.com/contact-cielf/20min">Juliette</a> ou <a href="https://calendly.com/genevieve-cielf/20min">Geneviève</a>.</p>
+    <p>Vous allez aussi recevoir un email de confirmation dans quelques minutes. Si vous ne l'avez pas reçu dans 30 minutes, vérifiez vos spams.</p>
     <p>Nous lirons votre candidature avec attention avant notre échange.</p>
     <p>À très bientôt !</p>
     <div class="signature">Juliette & Geneviève<br>Cofondatrices de CIELF</div>
@@ -775,17 +733,18 @@
 
 <script>
   // ════════════════════════════════════════
-  // CONFIGURATION — À MODIFIER
+  // CONFIGURATION
   // ════════════════════════════════════════
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx_26OTztI2a2FiYGD2KA9x3F8isd90BOnRKsk04WcxkdhwFD38VLDsPO5i0ECzX7_/exec';
+  var APPS_SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbxx_26OTztI2a2FiYGD2KA9x3F8isd90BOnRKsk04WcxkdhwFD38VLDsPO5i0ECzX7_/exec';
+  var FIREBASE_PROJECT_ID = 'cielf-membres';
 
   // ════════════════════════════════════════
   // NAVIGATION ENTRE ÉTAPES
   // ════════════════════════════════════════
 
-  let currentStep = 1;
-  const totalSteps = 5;
+  var currentStep = 1;
+  var totalSteps  = 5;
 
   function nextStep(from) {
     if (!validateStep(from)) return;
@@ -799,9 +758,9 @@
   function goToStep(stepNum) {
     document.getElementById('step-' + currentStep).classList.remove('active');
 
-    for (let i = 1; i <= totalSteps; i++) {
-      const prog = document.getElementById('prog-' + i);
-      const dot = prog.querySelector('.step-dot');
+    for (var i = 1; i <= totalSteps; i++) {
+      var prog = document.getElementById('prog-' + i);
+      var dot  = prog.querySelector('.step-dot');
       prog.classList.remove('active', 'done');
 
       if (i < stepNum) {
@@ -825,7 +784,7 @@
   // ════════════════════════════════════════
 
   function validateStep(step) {
-    let valid = true;
+    var valid = true;
 
     if (step === 1) {
       valid = validateRequired('prenom') && valid;
@@ -854,10 +813,9 @@
       valid = validateRequired('valeur') && valid;
       valid = validateSelect('source') && valid;
 
-      // Validation du champ recommandé par (obligatoire si "Recommandation d'un proche")
       if (document.getElementById('source').value === "Recommandation d'un proche") {
-        const recommande = document.getElementById('recommandePar').value.trim();
-        const errRecommande = document.getElementById('err-recommande-par');
+        var recommande    = document.getElementById('recommandePar').value.trim();
+        var errRecommande = document.getElementById('err-recommande-par');
         if (!recommande) {
           document.getElementById('recommandePar').classList.add('error');
           errRecommande.classList.add('visible');
@@ -873,8 +831,8 @@
   }
 
   function validateRequired(fieldId) {
-    const field = document.getElementById(fieldId);
-    const err = document.getElementById('err-' + fieldId);
+    var field = document.getElementById(fieldId);
+    var err   = document.getElementById('err-' + fieldId);
     if (!field.value.trim()) {
       field.classList.add('error');
       if (err) err.classList.add('visible');
@@ -886,9 +844,9 @@
   }
 
   function validateEmail(fieldId) {
-    const field = document.getElementById(fieldId);
-    const err = document.getElementById('err-' + fieldId);
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var field = document.getElementById(fieldId);
+    var err   = document.getElementById('err-' + fieldId);
+    var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!regex.test(field.value.trim())) {
       field.classList.add('error');
       if (err) err.classList.add('visible');
@@ -900,8 +858,8 @@
   }
 
   function validateSelect(fieldId) {
-    const field = document.getElementById(fieldId);
-    const err = document.getElementById('err-' + fieldId);
+    var field = document.getElementById(fieldId);
+    var err   = document.getElementById('err-' + fieldId);
     if (!field.value) {
       field.classList.add('error');
       if (err) err.classList.add('visible');
@@ -916,20 +874,20 @@
   document.querySelectorAll('input, textarea, select').forEach(function(el) {
     el.addEventListener('input', function() {
       el.classList.remove('error');
-      const err = document.getElementById('err-' + el.id);
+      var err = document.getElementById('err-' + el.id);
       if (err) err.classList.remove('visible');
     });
     el.addEventListener('change', function() {
       el.classList.remove('error');
-      const err = document.getElementById('err-' + el.id);
+      var err = document.getElementById('err-' + el.id);
       if (err) err.classList.remove('visible');
     });
   });
 
-  // Afficher/masquer le champ "Recommandé par" selon la sélection Source
+  // Afficher/masquer le champ "Recommandé par"
   document.getElementById('source').addEventListener('change', function() {
-    const groupe = document.getElementById('group-recommande-par');
-    const champ = document.getElementById('recommandePar');
+    var groupe = document.getElementById('group-recommande-par');
+    var champ  = document.getElementById('recommandePar');
     if (this.value === "Recommandation d'un proche") {
       groupe.style.display = 'block';
     } else {
@@ -941,14 +899,66 @@
   });
 
   // ════════════════════════════════════════
+  // ÉCRITURE DANS FIRESTORE (depuis le navigateur)
+  // Fonctionne car candidates autorise write: if true
+  // ════════════════════════════════════════
+
+  function ecrireDansFirestore(data) {
+    var docId = data.email.replace('@', '_at_').replace(/\./g, '_');
+
+    var url = 'https://firestore.googleapis.com/v1/projects/'
+      + FIREBASE_PROJECT_ID
+      + '/databases/(default)/documents/candidates/'
+      + docId;
+
+    var payload = {
+      fields: {
+        prenom:               { stringValue: data.prenom || '' },
+        nom:                  { stringValue: data.nom || '' },
+        email:                { stringValue: data.email || '' },
+        telephone:            { stringValue: data.telephone || '' },
+        pays:                 { stringValue: data.pays || '' },
+        ville:                { stringValue: data.ville || '' },
+        nomEntreprise:        { stringValue: data.nomEntreprise || '' },
+        secteur:              { stringValue: data.secteur || '' },
+        anciennete:           { stringValue: data.anciennete || '' },
+        siteWeb:              { stringValue: data.siteWeb || '' },
+        linkedin:             { stringValue: data.linkedin || '' },
+        descriptionBusiness:  { stringValue: data.descriptionBusiness || '' },
+        visionInternationale: { stringValue: data.visionInternationale || '' },
+        paysVises:            { stringValue: data.paysVises || '' },
+        pourquoiCIELF:        { stringValue: data.pourquoiCIELF || '' },
+        apport:               { stringValue: data.apport || '' },
+        valeur:               { stringValue: data.valeur || '' },
+        source:               { stringValue: data.source || '' },
+        recommandePar:        { stringValue: data.recommandePar || '' },
+        dateEnvoi:            { stringValue: data.dateEnvoi || '' },
+        createdAt:            { stringValue: new Date().toISOString() },
+        status:               { stringValue: 'candidature_recue' },
+        visioAssignee:        { stringValue: '' },
+        visioFaite:           { booleanValue: false },
+        paiementRecu:         { booleanValue: false },
+        factureEnvoyee:       { booleanValue: false },
+        notes:                { stringValue: '' },
+        authUid:              { stringValue: '' }
+      }
+    };
+
+    return fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
+
+  // ════════════════════════════════════════
   // SOUMISSION DU FORMULAIRE
   // ════════════════════════════════════════
 
   function submitForm() {
-
-    const rgpd = document.getElementById('rgpd');
-    const rgpdCustom = document.getElementById('rgpd-custom');
-    const errRgpd = document.getElementById('err-rgpd');
+    var rgpd       = document.getElementById('rgpd');
+    var rgpdCustom = document.getElementById('rgpd-custom');
+    var errRgpd    = document.getElementById('err-rgpd');
 
     if (!rgpd.checked) {
       rgpdCustom.classList.add('error');
@@ -961,7 +971,7 @@
     document.getElementById('btnSubmit').disabled = true;
     document.getElementById('sendingMsg').style.display = 'block';
 
-    const data = {
+    var data = {
       prenom:               document.getElementById('prenom').value.trim(),
       nom:                  document.getElementById('nom').value.trim(),
       email:                document.getElementById('email').value.trim(),
@@ -984,16 +994,22 @@
       dateEnvoi:            new Date().toLocaleString('fr-BE', { timeZone: 'Europe/Brussels' })
     };
 
-    fetch(APPS_SCRIPT_URL, {
+    // Lancer les deux appels en parallèle
+    var firestorePromise = ecrireDansFirestore(data).catch(function(err) {
+      console.error('Firestore error:', err);
+      // On ne bloque pas la soumission si Firestore échoue
+    });
+
+    var appsScriptPromise = fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
-    })
-    .then(function() {
-      showConfirmation(data.prenom);
-    })
-    .catch(function() {
+    }).catch(function() {
+      // no-cors = pas d'erreur exploitable, on continue
+    });
+
+    Promise.all([firestorePromise, appsScriptPromise]).then(function() {
       showConfirmation(data.prenom);
     });
   }
