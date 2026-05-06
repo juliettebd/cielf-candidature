@@ -706,6 +706,12 @@
         <span class="error-msg" id="err-source">Veuillez sélectionner une option.</span>
       </div>
 
+      <div class="form-group" id="group-recommande-par" style="display:none;">
+  <label class="field-label" for="recommandePar">Nom et prénom de la personne qui vous a recommandé <span class="required">*</span></label>
+  <input type="text" id="recommandePar" placeholder="Ex : Marie Dupont">
+  <span class="error-msg" id="err-recommande-par">Veuillez indiquer le nom de la personne.</span>
+</div>
+
       <div class="btn-row">
         <button class="btn-back" onclick="prevStep(4)">← Retour</button>
         <button class="btn-next" onclick="nextStep(4)">Continuer →</button>
@@ -759,7 +765,7 @@
     <p>L'étape suivante: un entretien de 20 minutes avec une des fondatrices de CIELF.</p>
     <p><ul>Réservez votre créneau avec Juliette: <a href="https://calendly.com/contact-cielf/20min">Calendly de Juliette</a></ul></p>
     <p><ul>Réservez votre créneau avec Geneviève: <a href="https://calendly.com/genevieve-cielf/20min">Calendly de Geneviève</a></ul></p>
-    <p>Vous allez aussi recevoir, dans quelques minutes, un email de confirmation de votre candidature. Vérifiez vos spams ou courriers indésirables.</p>
+    <p>Vous allez aussi recevoir, dans quelques minutes, un email de confirmation de votre candidature. L'envoi de ce mail passe par un service sécurisé, cela peut prendre du temps. Si vous ne l'avez pas reçu dans 30 minutes, vérifiez vos spams ou courriers indésirables.</p>
     <p>Nous lirons votre candidature avec attention avant notre échange.</p>
     <p>À très bientôt !</p>
     <div class="signature">Juliette & Geneviève<br>Cofondatrices de CIELF</div>
@@ -772,7 +778,6 @@
   // CONFIGURATION — À MODIFIER
   // ════════════════════════════════════════
 
-  // URL de votre Google Apps Script Web App (à remplir après déploiement)
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx_26OTztI2a2FiYGD2KA9x3F8isd90BOnRKsk04WcxkdhwFD38VLDsPO5i0ECzX7_/exec';
 
   // ════════════════════════════════════════
@@ -792,10 +797,8 @@
   }
 
   function goToStep(stepNum) {
-    // Cacher l'étape actuelle
     document.getElementById('step-' + currentStep).classList.remove('active');
 
-    // Mettre à jour la barre de progression
     for (let i = 1; i <= totalSteps; i++) {
       const prog = document.getElementById('prog-' + i);
       const dot = prog.querySelector('.step-dot');
@@ -812,11 +815,8 @@
       }
     }
 
-    // Afficher la nouvelle étape
     currentStep = stepNum;
     document.getElementById('step-' + currentStep).classList.add('active');
-
-    // Scroll vers le haut
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -853,6 +853,20 @@
       valid = validateRequired('apport') && valid;
       valid = validateRequired('valeur') && valid;
       valid = validateSelect('source') && valid;
+
+      // Validation du champ recommandé par (obligatoire si "Recommandation d'un proche")
+      if (document.getElementById('source').value === "Recommandation d'un proche") {
+        const recommande = document.getElementById('recommandePar').value.trim();
+        const errRecommande = document.getElementById('err-recommande-par');
+        if (!recommande) {
+          document.getElementById('recommandePar').classList.add('error');
+          errRecommande.classList.add('visible');
+          valid = false;
+        } else {
+          document.getElementById('recommandePar').classList.remove('error');
+          errRecommande.classList.remove('visible');
+        }
+      }
     }
 
     return valid;
@@ -898,7 +912,7 @@
     return true;
   }
 
-  // Effacer erreur dès que l'utilisateur tape
+  // Effacer erreur dès que l'utilisateur interagit
   document.querySelectorAll('input, textarea, select').forEach(function(el) {
     el.addEventListener('input', function() {
       el.classList.remove('error');
@@ -912,13 +926,26 @@
     });
   });
 
+  // Afficher/masquer le champ "Recommandé par" selon la sélection Source
+  document.getElementById('source').addEventListener('change', function() {
+    const groupe = document.getElementById('group-recommande-par');
+    const champ = document.getElementById('recommandePar');
+    if (this.value === "Recommandation d'un proche") {
+      groupe.style.display = 'block';
+    } else {
+      groupe.style.display = 'none';
+      champ.value = '';
+      champ.classList.remove('error');
+      document.getElementById('err-recommande-par').classList.remove('visible');
+    }
+  });
+
   // ════════════════════════════════════════
   // SOUMISSION DU FORMULAIRE
   // ════════════════════════════════════════
 
   function submitForm() {
 
-    // Valider RGPD
     const rgpd = document.getElementById('rgpd');
     const rgpdCustom = document.getElementById('rgpd-custom');
     const errRgpd = document.getElementById('err-rgpd');
@@ -931,11 +958,9 @@
     rgpdCustom.classList.remove('error');
     errRgpd.classList.remove('visible');
 
-    // Désactiver le bouton + afficher message envoi
     document.getElementById('btnSubmit').disabled = true;
     document.getElementById('sendingMsg').style.display = 'block';
 
-    // Collecter toutes les données
     const data = {
       prenom:               document.getElementById('prenom').value.trim(),
       nom:                  document.getElementById('nom').value.trim(),
@@ -955,10 +980,10 @@
       apport:               document.getElementById('apport').value.trim(),
       valeur:               document.getElementById('valeur').value.trim(),
       source:               document.getElementById('source').value,
+      recommandePar:        document.getElementById('recommandePar').value.trim(),
       dateEnvoi:            new Date().toLocaleString('fr-BE', { timeZone: 'Europe/Brussels' })
     };
 
-    // Envoyer à Apps Script
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -969,22 +994,16 @@
       showConfirmation(data.prenom);
     })
     .catch(function() {
-      // En cas d'erreur réseau, on affiche quand même la confirmation
-      // (Apps Script avec no-cors ne retourne pas d'erreur exploitable)
       showConfirmation(data.prenom);
     });
   }
 
   function showConfirmation(prenom) {
-    // Cacher header, barre de progression et formulaire
     document.getElementById('formHeader').style.display = 'none';
     document.getElementById('progressBar').style.display = 'none';
     document.getElementById('formBody').style.display = 'none';
-
-    // Afficher la confirmation avec le prénom
     document.getElementById('confirmPrenom').textContent = prenom + ',';
     document.getElementById('confirmation').classList.add('active');
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
