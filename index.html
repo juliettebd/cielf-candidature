@@ -1000,13 +1000,16 @@
       // On ne bloque pas la soumission si Firestore échoue
     });
 
+    // Content-Type text/plain : évite le preflight OPTIONS que Apps Script ne gère pas.
+    // Pas de mode 'no-cors' : la requête part normalement, la réponse peut être
+    // bloquée en lecture côté navigateur (pas de header CORS renvoyé par Apps Script),
+    // mais l'exécution serveur (Sheets + emails) a bien lieu avant ce blocage.
     var appsScriptPromise = fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(data)
-    }).catch(function() {
-      // no-cors = pas d'erreur exploitable, on continue
+    }).catch(function(err) {
+      console.error('Apps Script error:', err);
     });
 
     Promise.all([firestorePromise, appsScriptPromise]).then(function() {
