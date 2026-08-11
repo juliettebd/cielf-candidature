@@ -737,7 +737,6 @@
   // ════════════════════════════════════════
 
   var APPS_SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbxx_26OTztI2a2FiYGD2KA9x3F8isd90BOnRKsk04WcxkdhwFD38VLDsPO5i0ECzX7_/exec';
-  var FIREBASE_PROJECT_ID = 'cielf-membres';
 
   // ════════════════════════════════════════
   // NAVIGATION ENTRE ÉTAPES
@@ -899,59 +898,6 @@
   });
 
   // ════════════════════════════════════════
-  // ÉCRITURE DANS FIRESTORE (depuis le navigateur)
-  // Fonctionne car candidates autorise write: if true
-  // ════════════════════════════════════════
-
-  function ecrireDansFirestore(data) {
-    var docId = data.email.replace('@', '_at_').replace(/\./g, '_');
-
-    var url = 'https://firestore.googleapis.com/v1/projects/'
-      + FIREBASE_PROJECT_ID
-      + '/databases/(default)/documents/candidates/'
-      + docId;
-
-    var payload = {
-      fields: {
-        prenom:               { stringValue: data.prenom || '' },
-        nom:                  { stringValue: data.nom || '' },
-        email:                { stringValue: data.email || '' },
-        telephone:            { stringValue: data.telephone || '' },
-        pays:                 { stringValue: data.pays || '' },
-        ville:                { stringValue: data.ville || '' },
-        nomEntreprise:        { stringValue: data.nomEntreprise || '' },
-        secteur:              { stringValue: data.secteur || '' },
-        anciennete:           { stringValue: data.anciennete || '' },
-        siteWeb:              { stringValue: data.siteWeb || '' },
-        linkedin:             { stringValue: data.linkedin || '' },
-        descriptionBusiness:  { stringValue: data.descriptionBusiness || '' },
-        visionInternationale: { stringValue: data.visionInternationale || '' },
-        paysVises:            { stringValue: data.paysVises || '' },
-        pourquoiCIELF:        { stringValue: data.pourquoiCIELF || '' },
-        apport:               { stringValue: data.apport || '' },
-        valeur:               { stringValue: data.valeur || '' },
-        source:               { stringValue: data.source || '' },
-        recommandePar:        { stringValue: data.recommandePar || '' },
-        dateEnvoi:            { stringValue: data.dateEnvoi || '' },
-        createdAt:            { stringValue: new Date().toISOString() },
-        status:               { stringValue: 'candidature_recue' },
-        visioAssignee:        { stringValue: '' },
-        visioFaite:           { booleanValue: false },
-        paiementRecu:         { booleanValue: false },
-        factureEnvoyee:       { booleanValue: false },
-        notes:                { stringValue: '' },
-        authUid:              { stringValue: '' }
-      }
-    };
-
-    return fetch(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  }
-
-  // ════════════════════════════════════════
   // SOUMISSION DU FORMULAIRE
   // ════════════════════════════════════════
 
@@ -994,25 +940,21 @@
       dateEnvoi:            new Date().toLocaleString('fr-BE', { timeZone: 'Europe/Brussels' })
     };
 
-    // Lancer les deux appels en parallèle
-    var firestorePromise = ecrireDansFirestore(data).catch(function(err) {
-      console.error('Firestore error:', err);
-      // On ne bloque pas la soumission si Firestore échoue
-    });
-
-    // Content-Type text/plain : évite le preflight OPTIONS que Apps Script ne gère pas.
-    // Pas de mode 'no-cors' : la requête part normalement, la réponse peut être
-    // bloquée en lecture côté navigateur (pas de header CORS renvoyé par Apps Script),
-    // mais l'exécution serveur (Sheets + emails) a bien lieu avant ce blocage.
-    var appsScriptPromise = fetch(APPS_SCRIPT_URL, {
+    // Un seul appel : Apps Script fait tout côté serveur, dans l'ordre
+    // (Sheets, puis Firestore, puis les deux emails). Même pattern que
+    // le formulaire d'inscription des membres.
+    // Content-Type text/plain : évite le preflight OPTIONS que Apps Script
+    // ne gère pas. La réponse peut être bloquée en lecture côté navigateur
+    // (pas de header CORS renvoyé par Apps Script), mais l'exécution
+    // serveur a bien lieu avant ce blocage : on affiche la confirmation
+    // après l'envoi, qu'on puisse lire la réponse ou non.
+    fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(data)
     }).catch(function(err) {
       console.error('Apps Script error:', err);
-    });
-
-    Promise.all([firestorePromise, appsScriptPromise]).then(function() {
+    }).finally(function() {
       showConfirmation(data.prenom);
     });
   }
